@@ -7,16 +7,18 @@ $app['debug'] = true;
 
 // Register the monolog logging service
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
-  'monolog.logfile' => 'php://stderr',
+    'monolog.logfile' => 'php://stderr',
 ));
 
 // Our web handlers
+$app->get('/', function () use ($app) {
+    $app['monolog']->addDebug('logging output.');
+    return 'Hello';
+});
 
-$app->get('/', function() use($app) {
-  $app['monolog']->addDebug('logging output.');
-  return 'Hello';
+$app->get('/hello/{name}', function ($name) use ($app) {
+    return 'Hello '.$app->escape($name);
 });
 
 $app->run();
-
 ?>
